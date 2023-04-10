@@ -1,0 +1,71 @@
+package com.ondrad.animefeet;
+
+import com.google.inject.Provides;
+
+import javax.inject.Inject;
+import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.Client;
+import net.runelite.api.GameState;
+import net.runelite.api.events.GameStateChanged;
+import net.runelite.client.config.ConfigManager;
+import net.runelite.client.eventbus.Subscribe;
+import net.runelite.client.plugins.Plugin;
+import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.ui.overlay.OverlayManager;
+import javax.swing.Timer;
+
+import java.io.IOException;
+
+@Slf4j
+@PluginDescriptor(
+		name = "AnimeFeet",
+		description = "Displays anime feet",
+		tags = {"anime", "feet", "overlay", "nsfw"}
+)
+public class animeFeetPlugin extends Plugin {
+
+	@Inject
+	private animeFeetConfig config;
+
+	@Inject
+	private OverlayManager overlayManager;
+
+	@Inject
+	private animeFeetOverlay overlay;
+	private Timer timer;
+
+
+	@Override
+	protected void startUp() throws Exception {
+
+		overlayManager.add(overlay);
+
+		int delaySeconds = config.delaySeconds();
+		int delayMillis = delaySeconds * 1000;
+
+		timer = new Timer(delayMillis, e -> {
+			try {
+				overlay.GETRequest();
+			} catch (IOException ex) {
+				throw new RuntimeException(ex);
+			}
+		});
+		timer.start();
+
+	}
+
+
+	@Override
+	protected void shutDown() throws Exception
+	{
+		overlayManager.remove(overlay);
+		timer.stop();
+	}
+
+
+	@Provides
+	animeFeetConfig provideConfig(ConfigManager configManager)
+	{
+		return configManager.getConfig(animeFeetConfig.class);
+	}
+}
