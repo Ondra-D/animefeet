@@ -4,11 +4,7 @@ import com.google.inject.Provides;
 
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import net.runelite.api.Client;
-import net.runelite.api.GameState;
-import net.runelite.api.events.GameStateChanged;
 import net.runelite.client.config.ConfigManager;
-import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
@@ -36,7 +32,7 @@ public class animeFeetPlugin extends Plugin {
 
 
 	@Override
-	protected void startUp() throws Exception {
+	protected void startUp(){
 
 		overlayManager.add(overlay);
 
@@ -56,7 +52,7 @@ public class animeFeetPlugin extends Plugin {
 
 
 	@Override
-	protected void shutDown() throws Exception
+	protected void shutDown()
 	{
 		overlayManager.remove(overlay);
 		timer.stop();

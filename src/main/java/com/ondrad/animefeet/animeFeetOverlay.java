@@ -1,10 +1,7 @@
 package com.ondrad.animefeet;
 
-import com.ondrad.animefeet.animeFeetConfig;
-import net.runelite.api.Client;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
-import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.OverlayPosition;
 
 import javax.imageio.ImageIO;
@@ -27,7 +24,7 @@ public class animeFeetOverlay extends Overlay {
 
 
     @Inject
-    animeFeetOverlay() throws IOException {
+    animeFeetOverlay() {
         setPosition(OverlayPosition.DYNAMIC);
         setLayer(OverlayLayer.ALWAYS_ON_TOP);
     }
@@ -36,7 +33,7 @@ public class animeFeetOverlay extends Overlay {
     public void GETRequest() throws IOException {
         String urlName = "https://api.raphtalia.xyz/feet";
         URL urlForGetReq = new URL(urlName);
-        String read = null;
+        String read;
         HttpURLConnection connection = (HttpURLConnection) urlForGetReq.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Cache-Control", "no-cache");
@@ -44,7 +41,7 @@ public class animeFeetOverlay extends Overlay {
         if (codeResponse == HttpURLConnection.HTTP_OK) {
             InputStreamReader isrObj = new InputStreamReader(connection.getInputStream());
             BufferedReader bf = new BufferedReader(isrObj);
-            StringBuffer responseStr = new StringBuffer();
+            StringBuilder responseStr = new StringBuilder();
             while ((read = bf.readLine()) != null) {
                 responseStr.append(read);
             }
